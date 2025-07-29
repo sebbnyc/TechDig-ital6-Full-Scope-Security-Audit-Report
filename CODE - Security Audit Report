@@ -1,0 +1,158 @@
+TechDig​​ital6 – Full Scope Security Audit Report
+Date: July 28, 2025
+Auditor: Seb Singh, Cybersecurity Engineer
+Company: TechDigital6
+Audit Type: Full-Spectrum Security Posture Evaluation
+Scope: Internal & External Systems, Applications, Network, Policies, Access Control
+
+1. 🔍 Executive Summary
+This security audit assesses the current cybersecurity posture of TechDigital6, a mid-sized digital services firm. The goal is to identify vulnerabilities, evaluate current controls, and recommend improvements to mitigate potential threats across the network infrastructure, system architecture, access control mechanisms, application layers, and organizational policies.
+⚠️ Overall Risk Posture: Moderate-High
+🔒 Key Concern: Lack of centralized access control and external-facing unpatched services.
+
+2. 🏗️ Infrastructure & Network Architecture
+2.1 Network Mapping & Segmentation
+VLANs used for separating internal departments: ✅
+No segmentation between staging and production environments: ❌
+Public IPs exposed for internal tools (e.g., Jenkins, GitLab): ❌
+
+2.2 Firewall & Perimeter Defense
+Edge firewall: Fortinet (NGFW) with outdated firmware: ❌
+Default deny rules not enforced: ❌
+Ingress ports open: 22 (SSH), 80, 443, 8080, 3000
+Unused ports (e.g., 3389, 5900) left open: ❌
+
+2.3 VPN & Remote Access
+VPN enforced via OpenVPN with certificate-based auth: ✅
+No MFA configured on VPN: ❌
+Split tunneling enabled: ❌
+
+2.4 Recommendations
+Patch firewall firmware immediately.
+Enforce network segmentation between environments.
+Audit and close unused ports (3389, 5900).
+Enable MFA for VPN users.
+
+
+
+
+
+
+
+3. 🖥️ Server & Endpoint Hardening
+3.1 Operating Systems
+Mixed OS landscape: Windows Server 2016, Ubuntu 20.04
+No standard hardening baseline applied: ❌
+Windows SMBv1 still enabled: ❌
+3.2 Endpoint Protection
+Antivirus: Windows Defender + CrowdStrike Falcon (partial deployment)
+No endpoint detection on legacy MacBooks (HR/Marketing): ❌
+3.3 Patch Management
+Linux servers patched monthly via cron script: ✅
+Windows updates delayed for "compatibility": ❌
+3.4 Recommendations
+Disable SMBv1 across all Windows hosts.
+Apply CIS or STIG baseline hardening.
+Extend EDR coverage to all endpoints.
+
+4. 🔐 Identity and Access Management (IAM)
+4.1 Authentication
+Internal systems use LDAP without TLS encryption: ❌
+SaaS services (e.g., Google Workspace, Salesforce) secured with SSO: ✅
+Shared root/admin credentials found in DevOps team: ❌
+4.2 Authorization
+RBAC implemented only on cloud dashboard: ❌
+No least-privilege enforcement on AWS IAM policies: ❌
+4.3 Account Lifecycle
+Former employees still have active credentials (2 of 15): ❌
+No automated de-provisioning process: ❌
+4.4 Recommendations
+Encrypt LDAP authentication (LDAPS).
+Enforce password rotation and eliminate shared accounts.
+Audit IAM roles and enable least privilege on cloud resources.
+
+
+5. 🧱 Web Applications & APIs
+5.1 Web Applications (Customer Portal, Internal CRM)
+No WAF in place for production portal: ❌
+Internal CRM allows admin page access without auth token: ❌
+Input fields not sanitized – potential for XSS and SQL injection: ❌
+
+5.2 APIs
+Public REST API lacks authentication for GET endpoints: ❌
+No rate limiting or API gateway: ❌
+Uses outdated JWT libraries (vulnerable to token forgery): ❌
+5.3 Recommendations
+Implement WAF with OWASP rule sets.
+Sanitize all user inputs and use parameterized queries.
+Migrate to updated JWT libraries and secure API endpoints with API keys and OAuth2.
+
+
+6. 📜 Security Policies & Compliance
+6.1 Policy Review
+Acceptable Use Policy exists, but last updated in 2021: ❌
+No documented Incident Response Plan: ❌
+No annual cybersecurity awareness training: ❌
+6.2 Compliance Alignment
+Handles PII/financial data; no evidence of SOC 2 or ISO 27001 readiness: ❌
+No logging or SIEM solution in place: ❌
+6.3 Recommendations
+Draft, review, and enforce the following policies:
+Incident Response Plan
+Disaster Recovery Plan
+Access Management Policy
+Implement ELK or Splunk-based SIEM.
+Schedule mandatory annual cybersecurity training.
+
+7. 📊 Summary of Key Findings
+Category
+Finding
+Status
+Network Segmentation
+No separation of staging/prod
+❌
+Firewall Configuration
+Open unused ports, outdated firmware
+❌
+IAM Practices
+Shared accounts, no MFA on VPN
+❌
+Web Security
+No WAF, XSS injection points
+❌
+Logging & Monitoring
+No SIEM or central logging
+❌
+Compliance Readiness
+No formal policy or framework
+❌
+
+
+8. ✅ Prioritized Remediation Roadmap
+Priority
+Action Item
+Timeline
+🔴 High
+Close unused firewall ports and patch OS
+Week 1
+🔴 High
+Secure LDAP & IAM shared credentials
+Week 1-2
+🔴 High
+Apply input validation & update APIs
+Week 2-3
+🟡 Medium
+Segment network and limit RBAC scope
+Month 1
+🟡 Medium
+Implement logging and SIEM
+Month 1-2
+🟢 Low
+Review and publish updated security policies
+Month 2
+
+
+👨‍💻 Authored by
+Seb Singh
+Cybersecurity Engineer | Penetration Tester | Blue & Red Team Advocate
+📧 contact@sebsingh.dev | 🌐 LinkedIn
